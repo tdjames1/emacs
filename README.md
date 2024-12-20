@@ -25,6 +25,17 @@ If, on startup, packages can't be found, try `M-x package-refresh-contents`.
 Resolve elpy error in process sentinel: peculiar error: "exited abnormally with code 1" with `M-x
 elpy-rpc-reinstall-virtualenv` (seems to be needed on every session).
 
+Update: above error seems to be a [problem with finding a Python
+executable](https://emacs.stackexchange.com/a/66732) (Python not
+installed at system level on dcs34998). Added the following to
+`init.el`:
+
+```{lisp}
+;; Set path to Python interpreter for RPC backend
+(setq elpy-rpc-python-command "~/anaconda3/bin/python")
+```
+
+
 ### TODO
 
 - Explore virtual environments

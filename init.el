@@ -59,6 +59,29 @@
 ;; Allow hash to be entered
 (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#")))
 
+;;; NOTE conda is needed to set anaconda virtual environment python process.
+;;; Elpy can set the anaconda virtual env, but not the process. conda uses
+;;; environment.yml (I think to find the process).
+(use-package conda
+  :ensure t
+  :init
+  (setq conda-anaconda-home (expand-file-name "~/anaconda3"))
+  :config
+  ;; If you want interactive shell support, include:
+  (conda-env-initialize-interactive-shells)
+  ;; If you want eshell support, include:
+  (conda-env-initialize-eshell)
+  ;; If you want auto-activation, include:
+  (conda-env-autoactivate-mode t)
+  ;; Activate the project/virtual env you want to use.
+  ;; Via M-x conda-env-activate RET my-env
+  ;; or
+  ;; (conda-env-activate "my-env")
+  )
+
+;; Set path to Python interpreter for RPC backend
+(setq elpy-rpc-python-command "~/anaconda3/bin/python")
+
 (elpy-enable)
 ;;(pyenv-mode)
 (when (executable-find "ipython")
