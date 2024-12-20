@@ -69,7 +69,7 @@
 (require 'better-defaults)
 
 ;; Show dot for current directory
-(setq ido-show-dot-for-dired t)
+;;(setq ido-show-dot-for-dired t)
 
 ;; Store all interactive customizations in a temp file
 (setq custom-file (make-temp-file "emacs-custom-"))
