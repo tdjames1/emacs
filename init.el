@@ -2,6 +2,19 @@
 
 ;; Set OSX function key as Meta
 
+(defun my-scroll-up-by-line ()
+  "Scroll up one line."
+  (interactive)
+  (scroll-up-command 1))
+
+(defun my-scroll-down-1-line ()
+  "Scroll down one line."
+  (interactive)
+  (scroll-down-command 1))
+
+;; Reversing up and down gives the expected behaviour
+(global-set-key (kbd "C-x <up>") 'my-scroll-down-1-line)
+(global-set-key (kbd "C-x <down>") 'my-scroll-up-by-line)
 
 ;; INSTALL PACKAGES
 ;; --------------------------------------
