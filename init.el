@@ -88,6 +88,24 @@
     (setq python-shell-interpreter "ipython"
           python-shell-interpreter-args "-i --simple-prompt"))
 
+;; Google style docstrings
+(defun set-python-keybindings ()
+  (local-set-key (kbd "C-c i") 'python-insert-docstring-with-google-style-at-point)
+  )
+(add-hook 'python-mode-hook 'set-python-keybindings)
+
+;; Define key binding for stepping through code
+(eval-after-load "elpy"
+  #'(define-key elpy-mode-map (kbd "C-c RET") 'elpy-shell-send-group-and-step))
+
+(with-eval-after-load 'prog-mode
+    (with-eval-after-load 'flymake
+        (define-key prog-mode-map (kbd "M-n") 'flymake-goto-next-error)
+        (define-key prog-mode-map (kbd "M-p") 'flymake-goto-prev-error))
+    (with-eval-after-load 'flycheck
+        (define-key prog-mode-map (kbd "M-n") 'flycheck-next-error)
+        (define-key prog-mode-map (kbd "M-p") 'flycheck-previous-error)))
+
 ;; Enable better defaults
 (require 'better-defaults)
 
