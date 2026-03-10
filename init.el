@@ -24,6 +24,8 @@
              '("elpy" . "http://jorgenschaefer.github.io/packages/"))
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("elpa" . "https://elpa.gnu.org/packages/"))
 
 ;; activate all packages
 (package-initialize)
@@ -38,7 +40,11 @@
     material-theme
     exec-path-from-shell
     elpy
-    pyenv-mode))
+    pyenv-mode
+    virtualenvwrapper
+    auto-virtualenv
+    ;;projectile
+    deft))
 
 ;; install all packages in list
 (mapc #'(lambda (package)
@@ -94,9 +100,19 @@
   )
 (add-hook 'python-mode-hook 'set-python-keybindings)
 
+;; sphinx-doc mode
+;;(add-hook 'python-mode-hook (lambda ()
+;;                             (require 'sphinx-doc)
+;;                             (sphinx-doc-mode t)))
+
 ;; Define key binding for stepping through code
 (eval-after-load "elpy"
   #'(define-key elpy-mode-map (kbd "C-c RET") 'elpy-shell-send-group-and-step))
+
+;; Use flycheck instead of flymake
+;;(when (load "flycheck" t t)
+;;  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+;;  (add-hook 'elpy-mode-hook 'flycheck-mode))
 
 (with-eval-after-load 'prog-mode
     (with-eval-after-load 'flymake
@@ -114,5 +130,35 @@
 
 ;; Store all interactive customizations in a temp file
 (setq custom-file (make-temp-file "emacs-custom-"))
+
+;; Enable virtualenvwrapper
+(require 'virtualenvwrapper)
+
+;; Enable auto-virtualenv
+(require 'auto-virtualenv)
+(setq auto-virtualenv-global-dirs
+      '("~/.virtualenvs/" "~/.envs/" "~/.conda/" "~/anaconda3/envs/"))
+(setq auto-virtualenv-python-project-files
+      '("requirements.txt" "Pipfile" "pyproject.toml" "setup.py" "manage.py" "tox.ini" ".flake8"))
+
+;; Optional: which-key will show you options for partially completed keybindings
+;; It's extremely useful for packages with many keybindings like Projectile.
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode +1))
+
+(use-package projectile
+  :ensure t
+  :init
+  ;;(setq projectile-project-search-path '(("~/work/projects/" . 1) ("~/work/external/" . 1)))
+  :config
+  (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
+  (global-set-key (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1))
+
+;; deft
+(setq deft-recursive t)
+(setq deft-current-sort-method 'title)
 
 ;; init.el ends here
